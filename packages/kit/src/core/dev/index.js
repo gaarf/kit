@@ -49,11 +49,8 @@ export async function dev({ port, host, https }) {
 
 	/** @type {[any, string[]]} */
 	const [merged_config, conflicts] = deep_merge(vite_config, {
+		base: '/',
 		configFile: false,
-		root: cwd,
-		resolve: {
-			alias: get_aliases(config)
-		},
 		build: {
 			rollupOptions: {
 				// Vite dependency crawler needs an explicit JS entry point
@@ -73,7 +70,11 @@ export async function dev({ port, host, https }) {
 			}),
 			await create_plugin(config)
 		],
-		base: '/'
+		resolve: {
+			alias: get_aliases(config)
+		},
+		root: cwd,
+		spa: false
 	});
 
 	print_config_conflicts(conflicts, 'kit.vite.');
